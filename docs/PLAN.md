@@ -192,6 +192,7 @@ MainActivity ── NavHost ──┬── HomeScreen ◄── HomeViewModel �
 | UI | **Roborazzi** screenshot tests render every screen (light and dark) on the JVM. CI uploads them for review | `ScreenshotTest.kt` |
 | Static | Android Lint (fails the build on errors), Kotlin warnings-as-errors in `fit-core` and `cli` | CI |
 | Smoke | CI runs the CLI jar over the whole fixture corpus | CI |
+| Device | An **Android 14 emulator** in CI runs end-to-end conversion tests (share, ZIP, trim) and walks the real app through import → settings → editor with live map → save sheet, publishing screenshots of each step | `app/src/androidTest/` |
 
 **Manual test checklist before a release:** import from Garmin Connect share, a Strava bulk export zip,
 a folder with 100+ files, trim + privacy zone + save to folder / zip / share, rotate during conversion,
@@ -258,7 +259,7 @@ change gets a line in `CHANGELOG.md` under *Unreleased*.
 | **M1: Engine** ✅ | FIT decoder, GPX writer, processing, CLI, tests | Corpus matches independent decoders, GPX schema-valid |
 | **M2: App MVP** ✅ | Import (files/folder/share/zip/gz), batch convert to folder/zip/share, settings | CI green, APK installs, screenshots reviewed |
 | **M3: Editor** ✅ | Map + profile trim, nudge, trim idle, hide start/end, privacy zones | Manual checklist passes |
-| **M4: 1.0 release** | On-device testing across 3+ devices, polish, signed release, README screenshots | Tagged `v1.0.0` on GitHub |
+| **M4: 1.0 release** | ✅ Emulator E2E tests + signed `v1.0.0-beta.1` pre-release. Next: testing on 3+ physical devices, then `v1.0.0` | Tagged `v1.0.0` on GitHub |
 | **M5: Reach** | F-Droid submission, translations via Weblate, IzzyOnDroid | Listed in F-Droid |
 
 ---
