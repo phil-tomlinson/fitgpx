@@ -21,6 +21,10 @@ import io.github.philtomlinson.fitgpx.ui.editor.SelectionStats
 import io.github.philtomlinson.fitgpx.ui.home.HomeContent
 import io.github.philtomlinson.fitgpx.ui.settings.SettingsContent
 import io.github.philtomlinson.fitgpx.ui.theme.FitGpxTheme
+import io.github.philtomlinson.fitgpx.una.BluetoothReadiness
+import io.github.philtomlinson.fitgpx.una.SyncState
+import io.github.philtomlinson.fitgpx.una.UnaSyncContent
+import io.github.philtomlinson.fitgpx.una.WatchDevice
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -97,4 +101,28 @@ class ScreenshotTest {
             update = {}, onBack = {}, onPickFolder = {}, onClearFolder = {}, onOpenZones = {}, onOpenAbout = {},
         )
     }
+
+    @Composable
+    private fun Una(state: SyncState, readiness: BluetoothReadiness = BluetoothReadiness.READY) = UnaSyncContent(
+        state = state,
+        readiness = readiness,
+        devices = listOf(WatchDevice("AA:BB", "UNA Watch 7F21", paired = true), WatchDevice("CC:DD", "UNA Watch 03B9", paired = false)),
+        scanning = true,
+        remembered = WatchDevice("AA:BB", "UNA Watch 7F21", paired = true),
+        demoAvailable = false,
+        onBack = {}, onAllowBluetooth = {}, onEnableBluetooth = {}, onSync = {}, onDemo = {},
+        onCancel = {}, onAddAll = {}, onDone = {}, onAgain = {},
+    )
+
+    @Test
+    fun unaPick() = shot("08_una_pick") { Una(SyncState.Idle) }
+
+    @Test
+    fun unaDownloading() = shot("09_una_downloading") { Una(SyncState.Downloading(2, 5, "activity_20260927T081502.fit", 18_000, 36_327)) }
+
+    @Test
+    fun unaDone() = shot("10_una_done") { Una(SyncState.Done(added = 3, alreadySynced = 12, failed = 0)) }
+
+    @Test
+    fun unaPermission() = shot("11_una_permission") { Una(SyncState.Idle, BluetoothReadiness.NEEDS_PERMISSION) }
 }

@@ -15,8 +15,8 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         // Keep these literal: F-Droid's update checker reads them from this file.
-        versionCode = 9901
-        versionName = "1.0.0-beta.1"
+        versionCode = 10002
+        versionName = "1.1.0-beta.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -104,6 +104,7 @@ roborazzi {
 
 dependencies {
     implementation(project(":fit-core"))
+    implementation(project(":una-fts"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

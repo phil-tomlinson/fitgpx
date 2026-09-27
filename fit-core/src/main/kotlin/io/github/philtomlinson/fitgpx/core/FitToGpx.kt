@@ -5,6 +5,7 @@
 package io.github.philtomlinson.fitgpx.core
 
 import io.github.philtomlinson.fitgpx.core.fit.ActivityReader
+import io.github.philtomlinson.fitgpx.core.fit.FitProfile
 import io.github.philtomlinson.fitgpx.core.gpx.GpxOptions
 import io.github.philtomlinson.fitgpx.core.gpx.GpxWriter
 import io.github.philtomlinson.fitgpx.core.model.Activity
@@ -44,18 +45,13 @@ object FitToGpx {
      */
     fun defaultTitle(activity: Activity, fallbackZone: ZoneId = ZoneId.systemDefault()): String {
         activity.name?.takeIf { it.isNotBlank() && activity.isCourse }?.let { return it }
-        val sport = when (activity.sport) {
-            "cycling" -> "Ride"
-            "e_biking" -> "E-Bike Ride"
-            "running" -> "Run"
-            "walking" -> "Walk"
-            "hiking" -> "Hike"
-            "swimming" -> "Swim"
-            "cross_country_skiing", "alpine_skiing", "snowboarding" -> "Ski"
-            "rowing" -> "Row"
-            "paddling", "kayaking", "canoeing", "stand_up_paddleboarding" -> "Paddle"
-            null -> "Activity"
-            else -> activity.sport.replace('_', ' ').replaceFirstChar { it.uppercase() }
+        val sub = activity.subSport
+        val sport = when {
+            activity.sport == "cycling" && (sub == FitProfile.SubSport.MOUNTAIN || sub == FitProfile.SubSport.DOWNHILL) -> "Mountain Bike Ride"
+            activity.sport == "cycling" && sub == FitProfile.SubSport.GRAVEL -> "Gravel Ride"
+            activity.sport in setOf("cycling", "e_biking") && sub == FitProfile.SubSport.E_BIKE_MOUNTAIN -> "E-Mountain Bike Ride"
+            activity.sport == "running" && sub == FitProfile.SubSport.TRAIL -> "Trail Run"
+            else -> sportNoun(activity.sport)
         }
         val start = activity.startTime ?: return sport
         val zone: ZoneId = activity.utcOffsetSeconds?.let { ZoneOffset.ofTotalSeconds(it) } ?: fallbackZone
@@ -67,6 +63,20 @@ object FitToGpx {
             else -> "Night"
         }
         return "$part $sport"
+    }
+
+    private fun sportNoun(sport: String?): String = when (sport) {
+        "cycling" -> "Ride"
+        "e_biking" -> "E-Bike Ride"
+        "running" -> "Run"
+        "walking" -> "Walk"
+        "hiking" -> "Hike"
+        "swimming" -> "Swim"
+        "cross_country_skiing", "alpine_skiing", "snowboarding" -> "Ski"
+        "rowing" -> "Row"
+        "paddling", "kayaking", "canoeing", "stand_up_paddleboarding" -> "Paddle"
+        null -> "Activity"
+        else -> sport.replace('_', ' ').replaceFirstChar { it.uppercase() }
     }
 
     /** Tokens supported in output file name templates. */

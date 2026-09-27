@@ -14,7 +14,11 @@ import io.github.philtomlinson.fitgpx.data.LatLon
 import io.github.philtomlinson.fitgpx.data.QueueRepository
 import io.github.philtomlinson.fitgpx.data.SettingsRepository
 import io.github.philtomlinson.fitgpx.data.Storage
+import io.github.philtomlinson.fitgpx.una.UnaSync
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -23,7 +27,28 @@ class SettingsViewModel(
     private val app: Application,
     private val repository: SettingsRepository,
     private val queue: QueueRepository,
+    private val unaSync: UnaSync,
 ) : ViewModel() {
+
+    private val _unaStorage = MutableStateFlow(0 to 0L)
+    /** Number and total size of recordings copied from a UNA Watch. */
+    val unaStorage: StateFlow<Pair<Int, Long>> = _unaStorage.asStateFlow()
+
+    fun refreshUnaStorage() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val files = unaSync.syncedFiles()
+            _unaStorage.value = files.size to files.sumOf { it.length() }
+        }
+    }
+
+    fun clearUnaCopies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            unaSync.clearSynced()
+            _unaStorage.value = 0 to 0L
+        }
+    }
+
+    fun forgetUna() = update { it.copy(unaAddress = null, unaName = null) }
 
     val settings: StateFlow<AppSettings> = repository.settings.stateIn(viewModelScope, SharingStarted.Eagerly, AppSettings())
 

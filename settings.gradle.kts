@@ -23,5 +23,6 @@ dependencyResolutionManagement {
 rootProject.name = "fitgpx"
 
 include(":fit-core")
+include(":una-fts")
 include(":cli")
 include(":app")

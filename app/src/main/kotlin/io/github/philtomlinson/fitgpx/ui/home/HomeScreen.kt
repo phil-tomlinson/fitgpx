@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.UploadFile
+import androidx.compose.material.icons.filled.Watch
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -99,6 +100,7 @@ fun HomeScreen(
     onOpenItem: (Long) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenUna: () -> Unit = {},
 ) {
     val items by viewModel.items.collectAsStateWithLifecycle()
     val progress by viewModel.progress.collectAsStateWithLifecycle()
@@ -180,6 +182,7 @@ fun HomeScreen(
         onCancel = viewModel::cancel,
         onOpenSettings = onOpenSettings,
         onOpenAbout = onOpenAbout,
+        onOpenUna = onOpenUna,
     )
 
     sheetFor?.let { target ->
@@ -226,6 +229,7 @@ fun HomeContent(
     onCancel: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenUna: () -> Unit = {},
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var menu by remember { mutableStateOf(false) }
@@ -250,6 +254,11 @@ fun HomeContent(
                                     text = { Text(stringResource(R.string.action_select_folder)) },
                                     leadingIcon = { Icon(Icons.Filled.FolderOpen, null) },
                                     onClick = { addMenu = false; onSelectFolder() },
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.una_from_watch)) },
+                                    leadingIcon = { Icon(Icons.Filled.Watch, null) },
+                                    onClick = { addMenu = false; onOpenUna() },
                                 )
                             }
                         }
@@ -282,7 +291,7 @@ fun HomeContent(
         },
     ) { padding ->
         if (items.isEmpty() && progress == Progress.Idle) {
-            EmptyState(Modifier.padding(padding), onSelectFiles, onSelectFolder)
+            EmptyState(Modifier.padding(padding), onSelectFiles, onSelectFolder, onOpenUna)
         } else {
             LazyColumn(
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = padding.calculateTopPadding() + 4.dp, bottom = padding.calculateBottomPadding() + 16.dp),
@@ -374,7 +383,7 @@ private fun ActionBar(items: List<QueueItem>, progress: Progress, onConvert: () 
 }
 
 @Composable
-private fun EmptyState(modifier: Modifier, onSelectFiles: () -> Unit, onSelectFolder: () -> Unit) {
+private fun EmptyState(modifier: Modifier, onSelectFiles: () -> Unit, onSelectFolder: () -> Unit, onOpenUna: () -> Unit) {
     Column(
         modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 32.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -406,6 +415,12 @@ private fun EmptyState(modifier: Modifier, onSelectFiles: () -> Unit, onSelectFo
             Icon(Icons.Filled.FolderOpen, null, Modifier.size(20.dp))
             Spacer(Modifier.size(8.dp))
             Text(stringResource(R.string.action_select_folder))
+        }
+        Spacer(Modifier.height(4.dp))
+        TextButton(onClick = onOpenUna) {
+            Icon(Icons.Filled.Watch, null, Modifier.size(18.dp))
+            Spacer(Modifier.size(8.dp))
+            Text(stringResource(R.string.una_sync_from))
         }
         Spacer(Modifier.height(28.dp))
         Text(

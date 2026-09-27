@@ -9,6 +9,7 @@ if [ "$status" -ne 0 ]; then
   {
     grep -E '^e: ' "$log"
     grep -E -B1 -A14 'FAILED$' "$log"
+    grep -E -A6 '(AssertionError|Exception:|failure\(s\))' "$log" | grep -v '^\s*at ' | head -60
     grep -E -A20 'What went wrong' "$log"
     grep -E -A3 '^[^ ]+\.(kt|xml|kts):[0-9]+: (Error|Warning)' "$log"
   } | head -400 > "$log.err"

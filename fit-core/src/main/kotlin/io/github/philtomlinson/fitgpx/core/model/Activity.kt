@@ -78,6 +78,8 @@ data class Activity(
     val recordsWithoutPosition: Int,
     val recordCount: Int,
     val warnings: List<FitWarning>,
+    /** Sub-sport of the primary session (FIT enum), e.g. 8 = mountain biking. */
+    val subSport: Int? = null,
 ) {
     val startTime: Long? get() = points.firstOrNull { it.time != null }?.time ?: sessions.firstOrNull()?.startTime ?: timeCreated
     val endTime: Long? get() = points.lastOrNull { it.time != null }?.time

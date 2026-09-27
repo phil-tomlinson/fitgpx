@@ -1,0 +1,1 @@
+UNA sync fix: no longer stops on apps without an Activity folder; finds .fit files anywhere on the watch; Share log for troubleshooting.

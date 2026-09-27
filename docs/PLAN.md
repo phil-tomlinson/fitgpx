@@ -266,6 +266,9 @@ change gets a line in `CHANGELOG.md` under *Unreleased*.
 
 ## 9. Roadmap (post-1.0)
 
+- **UNA Watch sync** (in progress on `feature/una`, see [UNA.md](UNA.md)): Bluetooth File Transfer
+  client, sync screen, hardware testing, then merge.
+
 - **More formats**: TCX and KML/GeoJSON output, GPX *route* (`<rte>`) output for navigation devices.
 - **Split & merge**: split an activity at a point, and merge several into one GPX.
 - **Persist the queue** across process death, and add a *recent conversions* history.

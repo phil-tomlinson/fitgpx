@@ -49,6 +49,8 @@ class SettingsRepository(context: Context) {
         val dynamic = booleanPreferencesKey("dynamic_color")
         val units = stringPreferencesKey("units")
         val map = booleanPreferencesKey("show_map")
+        val unaAddress = stringPreferencesKey("una_address")
+        val unaName = stringPreferencesKey("una_name")
     }
 
     val settings: Flow<AppSettings> = store.data.map { read(it) }
@@ -83,6 +85,8 @@ class SettingsRepository(context: Context) {
             put(K.dynamic, s.dynamicColor)
             put(K.units, s.units.name)
             put(K.map, s.showMap)
+            put(K.unaAddress, s.unaAddress)
+            put(K.unaName, s.unaName)
         }
     }
 
@@ -111,6 +115,8 @@ class SettingsRepository(context: Context) {
         dynamicColor = p[K.dynamic] ?: d.dynamicColor,
         units = enumOr(p[K.units], d.units),
         showMap = p[K.map] ?: d.showMap,
+        unaAddress = p[K.unaAddress],
+        unaName = p[K.unaName],
     )
 
     companion object {
