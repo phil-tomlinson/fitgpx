@@ -57,18 +57,19 @@ jobs:
           ls -la /tmp/gpx
 
       - name: Publish screenshots to the ci/screenshots branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event_name == 'push' && 'ci/screenshots' || format('ci/screenshots-{0}', github.head_ref) }}
         run: |
           out="$(mktemp -d)"
           cp app/src/test/screenshots/*.png "$out"/
           cd "$out"
-          git init -q -b ci/screenshots
+          git init -q -b "$BRANCH"
           git add .
           git -c user.name="github-actions[bot]" -c user.email="41898099+github-actions[bot]@users.noreply.github.com" \
             commit -q -m "Screenshots for ${GITHUB_SHA::7}"
-          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/screenshots
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$BRANCH"
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v7
@@ -140,16 +141,17 @@ jobs:
             .github/scripts/gradle.sh :app:connectedDebugAndroidTest; status=$?; mkdir -p device-shots; adb pull /data/local/tmp/fitgpx-shots/. device-shots/ || true; exit $status
 
       - name: Publish device screenshots to the ci/device-screenshots branch
-        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: always() && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.event_name == 'push' && 'ci/device-screenshots' || format('ci/device-screenshots-{0}', github.head_ref) }}
         run: |
           ls device-shots/*.png >/dev/null 2>&1 || { echo "No device screenshots"; exit 0; }
           out="$(mktemp -d)"
           cp device-shots/*.png "$out"/
           cd "$out"
-          git init -q -b ci/device-screenshots
+          git init -q -b "$BRANCH"
           git add .
           git -c user.name="github-actions[bot]" -c user.email="41898099+github-actions[bot]@users.noreply.github.com" \
             commit -q -m "Device screenshots for ${GITHUB_SHA::7}"
-          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/device-screenshots
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$BRANCH"
