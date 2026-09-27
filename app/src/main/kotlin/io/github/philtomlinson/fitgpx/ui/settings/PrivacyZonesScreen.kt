@@ -80,6 +80,7 @@ private const val DEFAULT_RADIUS_M = 200.0
 fun PrivacyZonesScreen(viewModel: SettingsViewModel, onBack: () -> Unit) {
     val s by viewModel.settings.collectAsStateWithLifecycle()
     var addManually by remember { mutableStateOf(false) }
+    val inspection = LocalInspectionMode.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -106,7 +107,7 @@ fun PrivacyZonesScreen(viewModel: SettingsViewModel, onBack: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            if (s.showMap && !LocalInspectionMode.current) {
+            if (s.showMap && !inspection) {
                 item {
                     val dark = when (s.themeMode) {
                         ThemeMode.SYSTEM -> isSystemInDarkTheme()
