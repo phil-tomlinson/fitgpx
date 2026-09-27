@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
     private val container get() = (application as FitGpxApp).container
 
-    private val homeViewModel: HomeViewModel by viewModels {
+    internal val homeViewModel: HomeViewModel by viewModels {
         viewModelFactory { initializer { HomeViewModel(application, container.queue, container.settings) } }
     }
 
