@@ -195,8 +195,8 @@
     <string name="una_from_watch">From UNA Watch</string>
     <string name="una_sync_from">Sync from a UNA Watch</string>
     <string name="una_intro">FitGPX copies new recordings from your watch over Bluetooth and adds them to your list. Nothing is deleted from the watch.</string>
-    <string name="una_unsupported">This device doesn't support Bluetooth Low Energy.</string>
-    <string name="una_permission_why">FitGPX needs permission to find and connect to your watch. It's used only for syncing, and never for location.</string>
+    <string name="una_unsupported">This device doesn\'t support Bluetooth Low Energy.</string>
+    <string name="una_permission_why">FitGPX needs permission to find and connect to your watch. It\'s used only for syncing, and never for location.</string>
     <string name="una_allow_bluetooth">Allow Bluetooth</string>
     <string name="una_bluetooth_off">Bluetooth is off.</string>
     <string name="una_turn_on_bluetooth">Turn on Bluetooth</string>
@@ -206,7 +206,7 @@
     <string name="una_nearby">Nearby: tap to pair</string>
     <string name="una_searching">Looking for watches…</string>
     <string name="una_none_found">No watch found yet.</string>
-    <string name="una_tips">Keep the watch close and awake. If it doesn't appear, check that its Bluetooth is on; if another phone is connected to it, disconnect that first.</string>
+    <string name="una_tips">Keep the watch close and awake. If it doesn\'t appear, check that its Bluetooth is on; if another phone is connected to it, disconnect that first.</string>
     <string name="una_pairing">Pairing with your watch…</string>
     <string name="una_pairing_hint">Confirm the pairing request on your phone and, if asked, on the watch.</string>
     <string name="una_connecting">Connecting to your watch…</string>
@@ -224,8 +224,8 @@
         <item quantity="other">%d were already synced</item>
     </plurals>
     <plurals name="una_failed_files">
-        <item quantity="one">%d file couldn't be copied; try again</item>
-        <item quantity="other">%d files couldn't be copied; try again</item>
+        <item quantity="one">%d file couldn\'t be copied; try again</item>
+        <item quantity="other">%d files couldn\'t be copied; try again</item>
     </plurals>
     <plurals name="una_add_all">
         <item quantity="one">Add the synced activity to the list</item>
@@ -233,7 +233,7 @@
     </plurals>
     <string name="una_view_activities">View activities</string>
     <string name="una_sync_again">Sync again</string>
-    <string name="una_failed">Sync didn't finish</string>
+    <string name="una_failed">Sync didn\'t finish</string>
     <string name="una_retry">Try again</string>
     <string name="una_choose_watch">Choose watch</string>
     <string name="una_demo">Try with a simulated watch</string>
