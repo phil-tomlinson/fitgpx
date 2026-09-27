@@ -33,7 +33,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Core library tests
-        run: .github/scripts/gradle.sh :fit-core:test
+        run: .github/scripts/gradle.sh :fit-core:test :una-fts:test
 
       - name: CLI
         run: .github/scripts/gradle.sh :cli:fatJar
