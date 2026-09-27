@@ -31,7 +31,8 @@ To build a signed APK locally, export the same values as environment variables
 
 1. Make sure `main` is green in CI and the manual checklist in [PLAN.md §5](PLAN.md#5-quality-testing-strategy) passes.
 2. Bump `versionName` and `versionCode` in `app/build.gradle.kts`
-   (`versionCode = MAJOR*10000 + MINOR*100 + PATCH`).
+   (`versionCode = MAJOR*10000 + MINOR*100 + PATCH`; pre-releases of the next version count up just below
+   it, e.g. `1.0.0-beta.1` → `9901`). Tags containing `-` are published as GitHub pre-releases.
 3. In `CHANGELOG.md`, rename *Unreleased* to `## [X.Y.Z] - YYYY-MM-DD` and start a new *Unreleased* section.
 4. Add `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (≤500 characters, used by F-Droid).
 5. Commit, then tag and push:

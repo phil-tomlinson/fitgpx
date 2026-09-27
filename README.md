@@ -18,9 +18,9 @@ binary **`.fit`** files. Most mapping, route-planning and analysis tools want **
 the other on your phone, without an account or a server, and without sending your location anywhere.
 
 <p align="center">
-  <img src="docs/images/screenshots/02_home_list.png" width="30%" alt="Batch list"/>
+  <img src="docs/images/device/02_list.png" width="30%" alt="Batch list"/>
   &nbsp;
-  <img src="docs/images/screenshots/05_editor.png" width="30%" alt="Trim editor"/>
+  <img src="docs/images/device/05_editor_trimmed.png" width="30%" alt="Trim editor with map"/>
   &nbsp;
   <img src="docs/images/screenshots/04_home_list_dark.png" width="30%" alt="Dark theme"/>
 </p>

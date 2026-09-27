@@ -6,7 +6,9 @@ All notable changes to FitGPX are documented here. The format follows
 
 ## [Unreleased]
 
-## [1.0.0] - 2026-09-27
+## [1.0.0-beta.1] - 2026-09-27
+
+First public beta.
 
 ### Added
 - Convert FIT activities and courses to GPX 1.1 with elevation, time, heart rate, cadence, power and

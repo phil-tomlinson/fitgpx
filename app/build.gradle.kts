@@ -15,8 +15,8 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         // Keep these literal: F-Droid's update checker reads them from this file.
-        versionCode = 10000
-        versionName = "1.0.0"
+        versionCode = 9901
+        versionName = "1.0.0-beta.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
