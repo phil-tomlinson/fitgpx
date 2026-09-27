@@ -4,7 +4,6 @@
  */
 package io.github.philtomlinson.fitgpx
 
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
@@ -21,10 +20,17 @@ internal object DeviceTestSupport {
         return Uri.fromFile(f)
     }
 
-    /** Saves a full-screen screenshot; CI pulls these from the device and publishes them. */
+    /**
+     * Saves a full-screen screenshot to /data/local/tmp/fitgpx-shots, which survives the app being
+     * uninstalled after the test run; CI pulls it from there and publishes the images.
+     */
     fun screenshot(name: String) {
-        val bitmap = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot() ?: return
-        val dir = File(target.getExternalFilesDir(null), "shots").apply { mkdirs() }
-        File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
+        fun shell(cmd: String) = automation.executeShellCommand(cmd).close()
+        shell("mkdir -p $SHOTS_DIR")
+        shell("screencap -p $SHOTS_DIR/$name.png")
+        Thread.sleep(500) // screencap runs asynchronously in the shell
     }
+
+    private const val SHOTS_DIR = "/data/local/tmp/fitgpx-shots"
 }
