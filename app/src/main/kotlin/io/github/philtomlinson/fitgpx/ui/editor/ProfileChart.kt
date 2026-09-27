@@ -98,6 +98,7 @@ fun ProfileChart(
     val finishColor = colors.finish
     val measurer = rememberTextMeasurer()
     val labelStyle = MaterialTheme.typography.labelSmall.copy(color = onSurfaceVariant)
+    val labelBackground = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.85f)
 
     val values = remember(track, series) { seriesValues(track, series) }
     val cum = track.cumulative
@@ -213,9 +214,21 @@ fun ProfileChart(
             ChartSeries.SPEED -> { v -> Format.speed(v.toDouble(), units) }
             ChartSeries.HEART_RATE -> { v -> "${v.toInt()} bpm" }
         }
-        drawText(measurer, fmt(hi), Offset(2.dp.toPx(), 0f), labelStyle)
-        val loLabel = measurer.measure(fmt(lo), labelStyle)
-        drawText(loLabel, topLeft = Offset(2.dp.toPx(), topPad + h - loLabel.size.height - 2.dp.toPx()))
+        // Value labels sit on a translucent pill so handles and the curve never make them unreadable.
+        fun pill(text: String, x: Float, y: Float) {
+            val layout = measurer.measure(text, labelStyle)
+            val padX = 4.dp.toPx()
+            drawRoundRect(
+                color = labelBackground,
+                topLeft = Offset(x, y),
+                size = Size(layout.size.width + 2 * padX, layout.size.height.toFloat()),
+                cornerRadius = CornerRadius(4.dp.toPx()),
+            )
+            drawText(layout, topLeft = Offset(x + padX, y))
+        }
+        pill(fmt(hi), 0f, 0f)
+        val loHeight = measurer.measure(fmt(lo), labelStyle).size.height
+        pill(fmt(lo), 0f, topPad + h - loHeight - 2.dp.toPx())
         drawText(measurer, Format.distanceShort(0.0, units), Offset(0f, topPad + h + 3.dp.toPx()), labelStyle)
         val totalLabel = measurer.measure(Format.distanceShort(total, units), labelStyle)
         drawText(totalLabel, topLeft = Offset(w - totalLabel.size.width, topPad + h + 3.dp.toPx()))

@@ -475,14 +475,11 @@ private fun SaveOptions(
 
 private fun Modifier.clickableRow(onClick: () -> Unit) = this.clickable(onClick = onClick)
 
-/** A decorative winding route for the empty state. */
-internal val SAMPLE_ROUTE: List<LatLon> = run {
-    val pts = mutableListOf<LatLon>()
-    for (i in 0..120) {
-        val t = i / 120.0
-        val lat = 51.0 + t * 0.02 + 0.004 * kotlin.math.sin(t * 9.0)
-        val lon = -114.0 + t * 0.03 + 0.006 * kotlin.math.cos(t * 6.5) - 0.006
-        pts += LatLon(lat, lon)
-    }
-    pts
+/** A decorative route with a couple of switchbacks for the empty state. */
+internal val SAMPLE_ROUTE: List<LatLon> = List(161) { i ->
+    val t = i / 160.0
+    val x = 0.6 * kotlin.math.sin(2.4 * Math.PI * t) * (1 - 0.3 * t) + t
+    val y = 1.1 * t + 0.08 * kotlin.math.sin(6 * Math.PI * t)
+    // Longitude is stretched by 1/cos(51°) so the shape isn't squashed by the map projection.
+    LatLon(51.0 + y * 0.01, -114.0 + x * 0.01589)
 }

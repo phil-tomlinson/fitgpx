@@ -79,7 +79,7 @@ fun ActivityCard(
             ) {
                 val preview = summary?.preview
                 if (!preview.isNullOrEmpty()) {
-                    TrackPreview(preview, Modifier.size(64.dp), strokeWidth = 2.dp)
+                    TrackPreview(preview, Modifier.size(64.dp), strokeWidth = 2.dp, showEndpoints = false)
                 } else {
                     Icon(
                         if (item.status is ItemStatus.NoGps) Icons.Filled.GpsOff else sportIcon(summary?.sport),
