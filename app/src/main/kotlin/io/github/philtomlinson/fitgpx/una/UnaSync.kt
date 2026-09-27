@@ -67,6 +67,12 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
 
     suspend fun sync(connector: WatchConnector) {
         val newFiles = mutableListOf<File>()
+        var importedDone = false
+        suspend fun importNew() {
+            if (importedDone || newFiles.isEmpty()) return
+            importedDone = true
+            queue.import(newFiles.map { Uri.fromFile(it) })
+        }
         var already = 0
         var failed = 0
         try {
@@ -96,7 +102,7 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
                 }
             }
             _state.value = SyncState.Importing
-            importOnce(newFiles)
+            importNew()
             _state.value = SyncState.Done(newFiles.size, already, failed)
         } catch (e: CancellationException) {
             _state.value = SyncState.Idle
@@ -108,20 +114,10 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
         } finally {
             // Whatever was copied before a failure or cancel still goes into the list, otherwise
             // the next sync would consider it already synced and never show it.
-            withContext(NonCancellable) { importOnce(newFiles) }
+            withContext(NonCancellable) { importNew() }
         }
     }
 
-    private val imported = HashSet<String>()
-
-    private suspend fun importOnce(files: List<File>) {
-        val fresh = files.filter { imported.add(it.path) }
-        if (fresh.isNotEmpty()) queue.import(fresh.map { Uri.fromFile(it) })
-    }
-
     /** Adds every activity already copied from the watch to the list (e.g. after clearing the list). */
-    suspend fun importAllSynced(): Int {
-        imported.clear()
-        return queue.import(syncedFiles().map { Uri.fromFile(it) })
-    }
+    suspend fun importAllSynced(): Int = queue.import(syncedFiles().map { Uri.fromFile(it) })
 }
