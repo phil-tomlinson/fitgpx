@@ -15,8 +15,8 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         // Keep these literal: F-Droid's update checker reads them from this file.
-        versionCode = 10002
-        versionName = "1.1.0-beta.2"
+        versionCode = 10100
+        versionName = "1.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -45,6 +45,8 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (keystorePath != null) signingConfig = signingConfigs.getByName("release")
+            // Reproducible builds: don't embed the git commit in the APK.
+            vcsInfo.include = false
         }
     }
 
@@ -100,6 +102,12 @@ kotlin {
 
 roborazzi {
     outputDir.set(file("src/test/screenshots"))
+}
+
+// Reproducible builds (F-Droid verifies our signed APK by rebuilding it): ART baseline profiles are
+// not generated deterministically, so they are left out. They only speed up the very first launch.
+tasks.configureEach {
+    if (name.contains("ArtProfile", ignoreCase = true)) enabled = false
 }
 
 dependencies {

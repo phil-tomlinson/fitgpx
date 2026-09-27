@@ -1,1 +1,1 @@
-Convert FIT activity files to GPX: batch, trim and privacy zones, offline
+FIT to GPX converter, with direct sync from a UNA Watch. Batch, trim, offline

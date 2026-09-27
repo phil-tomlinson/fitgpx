@@ -1,11 +1,20 @@
-<p>Garmin, Wahoo, Coros, Hammerhead, Bryton, Zwift and most other fitness devices record activities as <b>.fit</b> files. <b>FitGPX</b> converts them to <b>GPX</b> on your phone, so you can use them in mapping, route-planning and analysis tools, without an account, a server, or uploading your location anywhere.</p>
+<p>Garmin, Wahoo, Coros, Hammerhead, Bryton, Zwift and most other fitness devices record activities as <b>.fit</b> files. <b>FitGPX</b> converts them to <b>GPX</b> on your phone, so you can use them in mapping, route-planning and analysis tools, without an account, a server, or uploading your location anywhere. It also syncs directly from a <b>UNA Watch</b> over Bluetooth, so you don't need a cable or another app to get your rides off it.</p>
 
-<p><b>Batch conversion</b></p>
+<p><b>Standalone FIT → GPX converter</b></p>
 <ul>
 <li>Pick many files, a whole folder, a Garmin Connect export (.zip) or a Strava bulk export (.fit.gz)</li>
 <li>Huge archives are streamed, so thousands of activities convert on a phone</li>
 <li>Save to a folder you choose once, bundle everything into a ZIP, or share to any app</li>
 <li>Open or share .fit files into FitGPX from your file manager, email or the Garmin Connect app</li>
+</ul>
+
+<p><b>Sync straight from a UNA Watch</b></p>
+<ul>
+<li>Pair once, then pull new recordings over Bluetooth with no cable and no separate companion app</li>
+<li>Every file is verified against the watch's own checksum before it's kept</li>
+<li>Only new recordings are copied; syncing again finds nothing to redo</li>
+<li>Rides are named from their sub-sport, e.g. "Morning Mountain Bike Ride"</li>
+<li>Once copied, they convert, trim and export exactly like any other .fit file</li>
 </ul>
 
 <p><b>Trim editor</b></p>
@@ -31,4 +40,4 @@
 <li>Multisport activities become one track per sport; optional GPS-spike removal, simplification and pause splitting</li>
 </ul>
 
-<p>FitGPX is free software under the GPL-3.0-or-later license. It isn't affiliated with Garmin.</p>
+<p>FitGPX is free software under the GPL-3.0-or-later license. It is not affiliated with Garmin, and it is an independent, unofficial client for the UNA Watch File Transfer Service, not affiliated with or endorsed by UNA Watch Ltd.</p>

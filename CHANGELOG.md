@@ -6,6 +6,18 @@ All notable changes to FitGPX are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-27
+
+Promotes UNA Watch sync out of beta, confirmed working on real hardware. Prepares the F-Droid submission:
+the store listing now leads with both FitGPX's roles (standalone FIT → GPX converter, and a direct UNA
+Watch sync client), and reproducible-build settings (no ART baseline profile, no VCS info) are enabled so
+F-Droid's build matches ours byte-for-byte.
+
+### Changed
+- Store description now covers UNA Watch sync as a headline feature, not a footnote.
+- Full attribution for every specification, library and test fixture FitGPX relies on is now in
+  [CREDITS.md](CREDITS.md), linked from the in-app About screen.
+
 ## [1.1.0-beta.2] - 2026-09-27
 
 ### Fixed

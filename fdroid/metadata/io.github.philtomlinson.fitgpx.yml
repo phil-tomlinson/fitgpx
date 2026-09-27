@@ -1,0 +1,57 @@
+# Staging copy of the recipe to submit as a merge request to
+# https://gitlab.com/fdroid/fdroiddata (as metadata/io.github.philtomlinson.fitgpx.yml).
+# This file is not read by F-Droid from here — see docs/RELEASING.md#f-droid for how to submit it.
+
+Categories:
+  - Navigation
+  - Sports & Health
+
+License: GPL-3.0-or-later
+AuthorName: FitGPX contributors
+WebSite: https://github.com/phil-tomlinson/fitgpx
+SourceCode: https://github.com/phil-tomlinson/fitgpx
+IssueTracker: https://github.com/phil-tomlinson/fitgpx/issues
+Changelog: https://github.com/phil-tomlinson/fitgpx/blob/main/CHANGELOG.md
+
+# Replace with the SHA-256 fingerprint of our signing certificate, printed at the bottom of every
+# GitHub Release (also in SHA256SUMS.txt). This lets F-Droid ship a build signed with our own key, so
+# users can move between the GitHub and F-Droid builds without uninstalling.
+AllowedAPKSigningKeys:
+  - REPLACE_WITH_SIGNING_CERT_SHA256
+
+RepoType: git
+Repo: https://github.com/phil-tomlinson/fitgpx.git
+
+Builds:
+  - versionName: '1.0.0-beta.1'
+    versionCode: 9901
+    commit: v1.0.0-beta.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '1.1.0-beta.1'
+    versionCode: 10001
+    commit: v1.1.0-beta.1
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '1.1.0-beta.2'
+    versionCode: 10002
+    commit: v1.1.0-beta.2
+    subdir: app
+    gradle:
+      - yes
+
+  - versionName: '1.1.0'
+    versionCode: 10100
+    commit: v1.1.0
+    subdir: app
+    gradle:
+      - yes
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: '1.1.0'
+CurrentVersionCode: 10100

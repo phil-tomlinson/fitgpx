@@ -1,0 +1,1 @@
+UNA Watch sync is out of beta. Store listing now covers it as a headline feature. Full source attribution in CREDITS.md, linked from About.

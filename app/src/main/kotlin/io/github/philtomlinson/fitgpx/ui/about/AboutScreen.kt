@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Gavel
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
@@ -57,6 +58,15 @@ private val LIBRARIES = listOf(
     Library("Jetpack Compose & AndroidX", "Apache-2.0", "https://developer.android.com/jetpack"),
     Library("Material Design icons", "Apache-2.0", "https://fonts.google.com/icons"),
     Library("osmdroid", "Apache-2.0", "https://github.com/osmdroid/osmdroid"),
+)
+
+/** Specifications and projects FitGPX builds on (see CREDITS.md for the full list). */
+private val ACKNOWLEDGEMENTS = listOf(
+    Library("FIT protocol (Garmin), clean-room decoder", "Public protocol description", "https://developer.garmin.com/fit/"),
+    Library("GPX 1.1 (TopoGrafix)", "Open format", "https://www.topografix.com/gpx.asp"),
+    Library("UNA Watch SDK: File Transfer Service and FIT layout", "MIT", "https://github.com/UNAWatch/una-sdk"),
+    Library("Adafruit BLE File Transfer protocol", "MIT", "https://github.com/adafruit/Adafruit_CircuitPython_BLE_File_Transfer"),
+    Library("python-fitparse test files, fitdecode", "MIT", "https://github.com/dtcooper/python-fitparse"),
 )
 
 @Composable
@@ -98,6 +108,15 @@ fun AboutScreen(onBack: () -> Unit) {
                     modifier = Modifier.clickable { uri.openUri(lib.url) },
                 )
             }
+            SectionHeader(stringResource(R.string.about_acknowledgements))
+            ACKNOWLEDGEMENTS.forEach { lib ->
+                ListItem(
+                    headlineContent = { Text(lib.name) },
+                    supportingContent = { Text(lib.license) },
+                    modifier = Modifier.clickable { uri.openUri(lib.url) },
+                )
+            }
+            AboutRow(Icons.Filled.Info, stringResource(R.string.about_all_credits), "CREDITS.md") { uri.openUri("$REPO_URL/blob/main/CREDITS.md") }
             Spacer(Modifier.height(24.dp))
         }
     }

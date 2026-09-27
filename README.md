@@ -58,7 +58,7 @@ the other on your phone, without an account or a server, and without sending you
 |---|---|
 | **GitHub Releases** | Signed APKs on the [Releases page](https://github.com/phil-tomlinson/fitgpx/releases) |
 | **Obtainium** | Add `https://github.com/phil-tomlinson/fitgpx` to get updates straight from GitHub |
-| **F-Droid** | Planned. The repo already has fastlane metadata and reproducible-build settings |
+| **F-Droid** | Recipe ready, pending submission. See [docs/RELEASING.md](docs/RELEASING.md#f-droid) |
 
 Each release lists the SHA-256 of the signing certificate so you can verify the APK.
 
@@ -113,4 +113,8 @@ Bug reports with a sample file are the most valuable contribution: see
 FitGPX is free software under the [GNU General Public License v3.0 or later](LICENSE).
 Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors.
 Test fixtures in `fit-core/src/test/resources/fit` come from [python-fitparse](https://github.com/dtcooper/python-fitparse) (MIT).
-FIT is a protocol by Garmin; FitGPX is not affiliated with or endorsed by Garmin.
+UNA Watch sync builds on the [UNA Watch SDK](https://github.com/UNAWatch/una-sdk) (MIT) for the File Transfer
+Service protocol and the `una-watch-mtb.fit` test fixture, which its own FIT encoder produced.
+See [CREDITS.md](CREDITS.md) for the full list of specifications, libraries and test data FitGPX relies on.
+FIT is a protocol by Garmin; FitGPX is not affiliated with or endorsed by Garmin. UNA is a trademark of UNA
+Watch Ltd; FitGPX is an independent, unofficial client for their File Transfer Service.
