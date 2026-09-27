@@ -42,10 +42,14 @@ the other on your phone, without an account or a server, and without sending you
   timestamps, developer fields, big-endian devices, chained files and multisport (one track per leg).
 - **Clean output.** Optional GPS-spike removal, split at pauses, line simplification and coordinate precision.
   Every file validates against the official GPX 1.1 schema.
+- **UNA Watch sync.** Copy new recordings straight off a UNA Watch over Bluetooth, verified with the
+  watch's own checksums. Rides are named from the sub-sport, e.g. "Morning Mountain Bike Ride". See
+  [docs/UNA.md](docs/UNA.md).
 - **Save anywhere.** Write to a folder you choose once, bundle into a ZIP, or share straight to another app.
   Open `.fit` files from a file manager or share them from Garmin Connect.
 - **Private by design.** No accounts, no analytics, no ads, no storage permission. The map, which uses
-  OpenStreetMap tiles, is the only network access, and you can turn it off.
+  OpenStreetMap tiles, is the only network access, and you can turn it off. Bluetooth is only requested
+  if you use UNA sync.
 - Material 3 design with light/dark themes, dynamic color, metric/imperial units, and screen-reader labels.
 
 ## Download
@@ -81,6 +85,8 @@ Run `java -jar fitgpx-cli.jar --help` for all options.
   from the public FIT protocol description and uses no Garmin SDK code. Its tests compare every decoded point
   against an independent decoder and validate the GPX output against the official XSD schemas.
 - **`app/`** is the Android app (Jetpack Compose, Material 3, osmdroid for maps).
+- **`una-fts/`** is a pure-Kotlin client for the UNA Watch Bluetooth File Transfer Service, tested
+  against a simulated watch.
 - **`cli/`** is the desktop command-line front end.
 
 The full design, build and deployment plan is in **[docs/PLAN.md](docs/PLAN.md)**.

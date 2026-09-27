@@ -6,6 +6,11 @@ All notable changes to FitGPX are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Sync activities straight from a UNA Watch over Bluetooth (new files only, checksum-verified).
+- Activities are named from their sub-sport: Mountain Bike Ride, Gravel Ride, Trail Run.
+- UNA Watch recordings show "Una" as the device.
+
 ## [1.0.0-beta.1] - 2026-09-27
 
 First public beta.
