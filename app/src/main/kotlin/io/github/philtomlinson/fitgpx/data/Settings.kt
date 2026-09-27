@@ -46,6 +46,10 @@ data class AppSettings(
     val dynamicColor: Boolean = false,
     val units: Units = Units.METRIC,
     val showMap: Boolean = true,
+
+    /** The UNA Watch last synced with (Bluetooth address and name). */
+    val unaAddress: String? = null,
+    val unaName: String? = null,
 ) {
     fun gpxOptions(trackName: String?): GpxOptions = GpxOptions(
         includeElevation = includeElevation,

@@ -190,6 +190,63 @@
     <string name="zones_add_coordinates">Add by coordinates</string>
     <string name="zones_coordinates_hint">Latitude and longitude in decimal degrees, e.g. from a map app.</string>
 
+    <!-- UNA Watch -->
+    <string name="una_title">UNA Watch</string>
+    <string name="una_from_watch">From UNA Watch</string>
+    <string name="una_sync_from">Sync from a UNA Watch</string>
+    <string name="una_intro">FitGPX copies new recordings from your watch over Bluetooth and adds them to your list. Nothing is deleted from the watch.</string>
+    <string name="una_unsupported">This device doesn't support Bluetooth Low Energy.</string>
+    <string name="una_permission_why">FitGPX needs permission to find and connect to your watch. It's used only for syncing, and never for location.</string>
+    <string name="una_allow_bluetooth">Allow Bluetooth</string>
+    <string name="una_bluetooth_off">Bluetooth is off.</string>
+    <string name="una_turn_on_bluetooth">Turn on Bluetooth</string>
+    <string name="una_sync_with">Sync with %1$s</string>
+    <string name="una_watches">Watches</string>
+    <string name="una_paired">Paired</string>
+    <string name="una_nearby">Nearby: tap to pair</string>
+    <string name="una_searching">Looking for watches…</string>
+    <string name="una_none_found">No watch found yet.</string>
+    <string name="una_tips">Keep the watch close and awake. If it doesn't appear, check that its Bluetooth is on; if another phone is connected to it, disconnect that first.</string>
+    <string name="una_pairing">Pairing with your watch…</string>
+    <string name="una_pairing_hint">Confirm the pairing request on your phone and, if asked, on the watch.</string>
+    <string name="una_connecting">Connecting to your watch…</string>
+    <string name="una_preparing">Preparing…</string>
+    <string name="una_scanning">Looking for activities…</string>
+    <string name="una_downloading">Downloading %1$d of %2$d</string>
+    <string name="una_importing">Adding to your list…</string>
+    <string name="una_nothing_new">No new activities on your watch</string>
+    <plurals name="una_added">
+        <item quantity="one">%d new activity added to your list</item>
+        <item quantity="other">%d new activities added to your list</item>
+    </plurals>
+    <plurals name="una_already">
+        <item quantity="one">%d was already synced</item>
+        <item quantity="other">%d were already synced</item>
+    </plurals>
+    <plurals name="una_failed_files">
+        <item quantity="one">%d file couldn't be copied; try again</item>
+        <item quantity="other">%d files couldn't be copied; try again</item>
+    </plurals>
+    <plurals name="una_add_all">
+        <item quantity="one">Add the synced activity to the list</item>
+        <item quantity="other">Add all %d synced activities to the list</item>
+    </plurals>
+    <string name="una_view_activities">View activities</string>
+    <string name="una_sync_again">Sync again</string>
+    <string name="una_failed">Sync didn't finish</string>
+    <string name="una_retry">Try again</string>
+    <string name="una_choose_watch">Choose watch</string>
+    <string name="una_demo">Try with a simulated watch</string>
+    <string name="settings_una">UNA Watch</string>
+    <string name="settings_una_watch">Remembered watch</string>
+    <string name="settings_una_none">None: sync from the list screen to pair one</string>
+    <string name="settings_una_forget">Forget watch</string>
+    <string name="settings_una_storage">Synced recordings</string>
+    <plurals name="settings_una_storage_value">
+        <item quantity="one">%1$d file · %2$s: tap to delete these copies</item>
+        <item quantity="other">%1$d files · %2$s: tap to delete these copies</item>
+    </plurals>
+
     <!-- About -->
     <string name="about_title">About FitGPX</string>
     <string name="about_subtitle">Version, source code, licenses</string>

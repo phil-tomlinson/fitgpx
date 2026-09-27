@@ -35,6 +35,9 @@ import io.github.philtomlinson.fitgpx.ui.settings.PrivacyZonesScreen
 import io.github.philtomlinson.fitgpx.ui.settings.SettingsScreen
 import io.github.philtomlinson.fitgpx.ui.settings.SettingsViewModel
 import io.github.philtomlinson.fitgpx.ui.theme.FitGpxTheme
+import io.github.philtomlinson.fitgpx.una.DemoWatchConnector
+import io.github.philtomlinson.fitgpx.una.UnaSyncScreen
+import io.github.philtomlinson.fitgpx.una.UnaSyncViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -53,7 +56,7 @@ class MainActivity : ComponentActivity() {
             val settings by homeViewModel.settings.collectAsStateWithLifecycle()
             FitGpxTheme(themeMode = settings.themeMode, dynamicColor = settings.dynamicColor) {
                 val nav = rememberNavController()
-                val settingsFactory = viewModelFactory { initializer { SettingsViewModel(application, container.settings, container.queue) } }
+                val settingsFactory = viewModelFactory { initializer { SettingsViewModel(application, container.settings, container.queue, container.unaSync) } }
                 NavHost(
                     navController = nav,
                     startDestination = "home",
@@ -68,7 +71,21 @@ class MainActivity : ComponentActivity() {
                             onOpenItem = { id -> nav.navigate("editor/$id") },
                             onOpenSettings = { nav.navigate("settings") },
                             onOpenAbout = { nav.navigate("about") },
+                            onOpenUna = { nav.navigate("una") },
                         )
+                    }
+                    composable("una") {
+                        val vm: UnaSyncViewModel = viewModel(
+                            factory = viewModelFactory {
+                                initializer {
+                                    UnaSyncViewModel(
+                                        container.unaSync, container.unaDevices, container.settings,
+                                        demoConnector = if (BuildConfig.DEBUG) DemoWatchConnector(application) else null,
+                                    )
+                                }
+                            },
+                        )
+                        UnaSyncScreen(vm, container.unaDevices, onBack = { nav.popBackStack() })
                     }
                     composable("editor/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) { entry ->
                         val id = entry.arguments?.getLong("id") ?: 0L

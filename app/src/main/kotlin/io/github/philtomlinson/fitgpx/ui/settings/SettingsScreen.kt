@@ -40,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -48,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -74,6 +76,8 @@ fun SettingsScreen(
     onOpenAbout: () -> Unit,
 ) {
     val s by viewModel.settings.collectAsStateWithLifecycle()
+    val una by viewModel.unaStorage.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) { viewModel.refreshUnaStorage() }
     val pickFolder = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { it?.let(viewModel::setOutputFolder) }
     SettingsContent(
         s = s,
@@ -83,6 +87,10 @@ fun SettingsScreen(
         onClearFolder = viewModel::clearOutputFolder,
         onOpenZones = onOpenZones,
         onOpenAbout = onOpenAbout,
+        unaFiles = una.first,
+        unaBytes = una.second,
+        onForgetUna = viewModel::forgetUna,
+        onClearUna = viewModel::clearUnaCopies,
     )
 }
 
@@ -95,6 +103,10 @@ fun SettingsContent(
     onClearFolder: () -> Unit,
     onOpenZones: () -> Unit,
     onOpenAbout: () -> Unit,
+    unaFiles: Int = 0,
+    unaBytes: Long = 0,
+    onForgetUna: () -> Unit = {},
+    onClearUna: () -> Unit = {},
 ) {
     var dialog by remember { mutableStateOf<Dialog?>(null) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -154,6 +166,25 @@ fun SettingsContent(
             )
             ClickRow(stringResource(R.string.settings_hide_start), hideLabel(s.hideStartMeters, s.units)) { dialog = Dialog.HIDE_START }
             ClickRow(stringResource(R.string.settings_hide_end), hideLabel(s.hideEndMeters, s.units)) { dialog = Dialog.HIDE_END }
+
+            SectionHeader(stringResource(R.string.settings_una))
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_una_watch)) },
+                supportingContent = { Text(s.unaName ?: stringResource(R.string.settings_una_none)) },
+                trailingContent = if (s.unaAddress != null) {
+                    { IconButton(onClick = onForgetUna) { Icon(Icons.Filled.Clear, stringResource(R.string.settings_una_forget)) } }
+                } else {
+                    null
+                },
+            )
+            if (unaFiles > 0) {
+                val size = android.text.format.Formatter.formatShortFileSize(LocalContext.current, unaBytes)
+                ClickRow(
+                    stringResource(R.string.settings_una_storage),
+                    pluralStringResource(R.plurals.settings_una_storage_value, unaFiles, unaFiles, size),
+                    onClick = onClearUna,
+                )
+            }
 
             SectionHeader(stringResource(R.string.settings_appearance))
             ClickRow(stringResource(R.string.settings_theme), stringResource(themeLabel(s.themeMode))) { dialog = Dialog.THEME }

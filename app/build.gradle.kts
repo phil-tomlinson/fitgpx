@@ -104,6 +104,7 @@ roborazzi {
 
 dependencies {
     implementation(project(":fit-core"))
+    implementation(project(":una-fts"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
