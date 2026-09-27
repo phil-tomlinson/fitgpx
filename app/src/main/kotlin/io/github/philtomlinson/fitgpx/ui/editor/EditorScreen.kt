@@ -78,7 +78,9 @@ import io.github.philtomlinson.fitgpx.ui.components.Stat
 import io.github.philtomlinson.fitgpx.ui.components.TrackPreview
 import io.github.philtomlinson.fitgpx.ui.theme.FitGpxTheme
 import io.github.philtomlinson.fitgpx.ui.theme.NumberStyle
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 @Composable
@@ -90,7 +92,13 @@ fun EditorScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val selection by viewModel.selection.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-    val applyThen: (() -> Unit) -> Unit = { next -> scope.launch { viewModel.apply(); next() } }
+    // Navigation must happen on the main thread whatever dispatcher the edit was saved on.
+    val applyThen: (() -> Unit) -> Unit = { next ->
+        scope.launch {
+            viewModel.apply()
+            withContext(Dispatchers.Main) { next() }
+        }
+    }
     BackHandler { applyThen(onClose) }
     EditorContent(
         state = state,
