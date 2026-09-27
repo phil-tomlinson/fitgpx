@@ -141,6 +141,16 @@ object FitProfile {
         84 to "jump_rope", 85 to "pool_apnea", 86 to "mobility", 87 to "geocaching", 88 to "canoeing",
     )
 
+    /** Sub-sports that change how an activity is named. */
+    object SubSport {
+        const val TRAIL = 3
+        const val ROAD = 7
+        const val MOUNTAIN = 8
+        const val DOWNHILL = 9
+        const val GRAVEL = 46
+        const val E_BIKE_MOUNTAIN = 47
+    }
+
     /** Manufacturers users are likely to encounter, for display only. */
     val MANUFACTURERS: Map<Int, String> = mapOf(
         1 to "Garmin", 6 to "SRM", 7 to "Quarq", 9 to "Saris", 16 to "Timex", 23 to "Suunto",
@@ -148,7 +158,7 @@ object FitProfile {
         73 to "Wattbike", 86 to "Elite", 89 to "Tacx", 107 to "Magene", 115 to "iGPSPORT",
         255 to "Development", 258 to "Lezyne", 260 to "Zwift", 263 to "Favero", 265 to "Strava",
         267 to "Bryton", 268 to "SRAM", 282 to "The Sufferfest", 289 to "Hammerhead", 294 to "COROS",
-        310 to "Decathlon", 339 to "Zepp", 340 to "Peloton", 348 to "Huawei",
+        310 to "Decathlon", 339 to "Zepp", 340 to "Peloton", 348 to "Huawei", 351 to "Una",
     )
 
     val COURSE_POINT_TYPES: Map<Int, String> = mapOf(

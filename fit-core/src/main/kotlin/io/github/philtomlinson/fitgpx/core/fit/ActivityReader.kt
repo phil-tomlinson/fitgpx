@@ -34,6 +34,7 @@ class ActivityReader(private val decoder: FitDecoder = FitDecoder()) {
         var timeCreatedFit: Long? = null
         var sportName: String? = null
         var sportEnum: Int? = null
+        var sportSubSport: Int? = null
         var courseName: String? = null
         var courseSport: Int? = null
         var utcOffset: Int? = null
@@ -122,6 +123,7 @@ class ActivityReader(private val decoder: FitDecoder = FitDecoder()) {
                 }
                 Mesg.SPORT -> {
                     if (sportEnum == null) sportEnum = m.int(FitProfile.Sport.SPORT)
+                    if (sportSubSport == null) sportSubSport = m.int(FitProfile.Sport.SUB_SPORT)
                     if (sportName == null) sportName = m.string(FitProfile.Sport.NAME)
                 }
                 Mesg.COURSE -> {
@@ -204,6 +206,7 @@ class ActivityReader(private val decoder: FitDecoder = FitDecoder()) {
                 recordsWithoutPosition = recordsWithoutPosition + implausiblePoints,
                 recordCount = recordCount,
                 warnings = warnings,
+                subSport = sessions.firstNotNullOfOrNull { it.subSport } ?: sportSubSport,
             )
         }
     }
