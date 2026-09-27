@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)build, e.g. v1.0.0
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Check version matches tag
+        run: |
+          name=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
+          if [ "v$name" != "$TAG" ]; then
+            echo "::error::Tag $TAG does not match versionName $name in app/build.gradle.kts"; exit 1
+          fi
+
+      - name: Decode signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.FITGPX_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::Repository secret FITGPX_KEYSTORE_BASE64 is not set. See docs/RELEASING.md."; exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "FITGPX_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: ./gradlew :fit-core:test :app:testDebugUnitTest
+
+      - name: Build signed APK and CLI
+        env:
+          FITGPX_KEYSTORE_PASSWORD: ${{ secrets.FITGPX_KEYSTORE_PASSWORD }}
+          FITGPX_KEY_ALIAS: ${{ secrets.FITGPX_KEY_ALIAS }}
+          FITGPX_KEY_PASSWORD: ${{ secrets.FITGPX_KEY_PASSWORD }}
+        run: ./gradlew :app:assembleRelease :cli:fatJar
+
+      - name: Collect release files
+        run: |
+          mkdir dist
+          cp app/build/outputs/apk/release/app-release.apk "dist/FitGPX-$TAG.apk"
+          cp cli/build/libs/fitgpx-cli.jar "dist/fitgpx-cli-$TAG.jar"
+          cd dist && sha256sum * > SHA256SUMS.txt && cat SHA256SUMS.txt
+          # Print the signing certificate fingerprint so users can verify it.
+          $ANDROID_HOME/build-tools/$(ls $ANDROID_HOME/build-tools | sort -V | tail -1)/apksigner verify --print-certs "FitGPX-$TAG.apk" | tee ../signing.txt
+
+      - name: Release notes
+        run: |
+          version="${TAG#v}"
+          awk -v v="$version" '/^## \[/{p = index($0, "[" v "]") > 0; next} p' CHANGELOG.md > notes.md
+          {
+            echo ""
+            echo "### Verify"
+            echo '```'
+            cat signing.txt | grep -i 'SHA-256' || true
+            echo '```'
+          } >> notes.md
+          cat notes.md
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ env.TAG }}
+          name: FitGPX ${{ env.TAG }}
+          body_path: notes.md
+          files: dist/*
+          fail_on_unmatched_files: true

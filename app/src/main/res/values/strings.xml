@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">FitGPX</string>
+
+    <!-- Actions -->
+    <string name="action_about">About</string>
+    <string name="action_add">Add</string>
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear_all">Clear list</string>
+    <string name="action_clear_converted">Remove converted</string>
+    <string name="action_close">Close</string>
+    <string name="action_edit">Trim &amp; edit</string>
+    <string name="action_more">More options</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_save">Save</string>
+    <string name="action_select_files">Select files</string>
+    <string name="action_select_folder">Select folder</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Home -->
+    <string name="home_empty_title">Turn FIT files into GPX</string>
+    <string name="home_empty_body">Pick activities recorded by your watch or bike computer. Convert one or hundreds at once, trim them, and hide your home.</string>
+    <string name="home_empty_supported">Works with .fit files, Garmin Connect exports (.zip) and Strava bulk exports (.fit.gz)</string>
+    <string name="home_empty_private">Runs offline. Nothing is uploaded.</string>
+    <string name="home_importing">Reading %1$s…</string>
+    <string name="home_converting">Converting %1$d of %2$d</string>
+    <plurals name="home_summary">
+        <item quantity="one">%1$d activity · %2$s</item>
+        <item quantity="other">%1$d activities · %2$s</item>
+    </plurals>
+    <plurals name="home_problems">
+        <item quantity="one">%d file can\'t be converted</item>
+        <item quantity="other">%d files can\'t be converted</item>
+    </plurals>
+    <plurals name="home_convert">
+        <item quantity="one">Convert %d activity</item>
+        <item quantity="other">Convert %d activities</item>
+    </plurals>
+
+    <string name="badge_trimmed">Trimmed</string>
+    <string name="badge_recovered">Recovered</string>
+    <string name="badge_course">Course</string>
+
+    <string name="status_converting">Converting…</string>
+    <string name="status_no_gps">No GPS data (indoor, or GPS was off)</string>
+    <string name="status_failed">Can\'t read this file: %1$s</string>
+    <string name="status_converted">Saved as %1$s</string>
+    <string name="status_convert_failed">Conversion failed: %1$s</string>
+
+    <!-- Save sheet -->
+    <plurals name="save_sheet_title">
+        <item quantity="one">Save %d GPX file</item>
+        <item quantity="other">Save %d GPX files</item>
+    </plurals>
+    <string name="save_to_folder">Save to “%1$s”</string>
+    <string name="save_to_folder_hint">Your default folder</string>
+    <string name="save_choose_folder">Choose a folder…</string>
+    <string name="save_other_folder">Choose another folder…</string>
+    <string name="save_choose_folder_hint">It will be remembered for next time</string>
+    <string name="save_zip">Save as a ZIP file…</string>
+    <string name="save_zip_hint">One archive containing every GPX file</string>
+    <string name="save_share">Share…</string>
+    <string name="save_share_hint">Send to Strava, Komoot, email, Drive, a messenger…</string>
+    <string name="share_chooser">Share GPX files</string>
+    <string name="share_no_app">No app can receive GPX files</string>
+
+    <plurals name="result_saved_folder">
+        <item quantity="one">%1$d GPX file saved to %2$s</item>
+        <item quantity="other">%1$d GPX files saved to %2$s</item>
+    </plurals>
+    <plurals name="result_saved_zip">
+        <item quantity="one">%d GPX file saved to the ZIP archive</item>
+        <item quantity="other">%d GPX files saved to the ZIP archive</item>
+    </plurals>
+    <plurals name="result_failed">
+        <item quantity="one">%d file couldn\'t be converted</item>
+        <item quantity="other">%d files couldn\'t be converted</item>
+    </plurals>
+    <string name="result_nothing_found">No FIT activities found</string>
+
+    <!-- Editor -->
+    <string name="editor_loading">Loading activity…</string>
+    <string name="editor_error">Can\'t open this activity: %1$s</string>
+    <string name="editor_reset">Reset</string>
+    <string name="editor_done">Done</string>
+    <string name="editor_save_gpx">Save GPX</string>
+    <string name="editor_trim">Trim</string>
+    <string name="editor_trim_hint">Drag the handles on the chart or the slider to keep only the part you want.</string>
+    <string name="editor_auto_trim">Trim idle</string>
+    <string name="editor_chart_description">Activity profile with trim handles</string>
+    <string name="editor_start">Start</string>
+    <string name="editor_end">End</string>
+    <string name="editor_nudge_back">Move %1$s one point back</string>
+    <string name="editor_nudge_forward">Move %1$s one point forward</string>
+    <string name="editor_privacy">Privacy</string>
+    <string name="editor_privacy_hint">Hide where you started and finished without cutting the activity itself.</string>
+    <string name="editor_hide_start">Hide first</string>
+    <string name="editor_hide_end">Hide last</string>
+    <string name="editor_hide_off">Off</string>
+    <plurals name="editor_zones_applied">
+        <item quantity="one">%d privacy zone from Settings is applied</item>
+        <item quantity="other">%d privacy zones from Settings are applied</item>
+    </plurals>
+    <plurals name="editor_points_hidden">
+        <item quantity="one">%d point will be hidden</item>
+        <item quantity="other">%d points will be hidden</item>
+    </plurals>
+
+    <string name="stat_distance">Distance</string>
+    <string name="stat_moving">Moving time</string>
+    <string name="stat_elevation">Elevation gain</string>
+
+    <string name="chart_elevation">Elevation</string>
+    <string name="chart_speed">Speed</string>
+    <string name="chart_heart_rate">Heart rate</string>
+
+    <!-- Settings -->
+    <string name="settings_output">Output</string>
+    <string name="settings_folder">Default folder</string>
+    <string name="settings_folder_none">Not set: you\'ll be asked where to save</string>
+    <string name="settings_folder_clear">Forget folder</string>
+    <string name="settings_file_names">File names</string>
+    <string name="settings_file_names_preview">Example: %1$s</string>
+    <string name="settings_file_names_hint">{name} is the original file name; {date} and {time} are the local start time of the activity.</string>
+    <string name="settings_conflict">If a file already exists</string>
+    <string name="settings_conflict_keep">Keep both</string>
+    <string name="settings_conflict_replace">Replace it</string>
+
+    <string name="settings_content">GPX content</string>
+    <string name="settings_elevation">Elevation</string>
+    <string name="settings_time">Timestamps</string>
+    <string name="settings_time_hint">Turn off to share a route without revealing when you did it</string>
+    <string name="settings_hr">Heart rate</string>
+    <string name="settings_cadence">Cadence</string>
+    <string name="settings_power">Power</string>
+    <string name="settings_temperature">Temperature</string>
+    <string name="settings_course_points">Course points</string>
+    <string name="settings_course_points_hint">Turns, climbs and water stops from course files, as waypoints</string>
+    <string name="settings_laps">Lap markers</string>
+    <string name="settings_laps_hint">Add the start of each lap as a waypoint</string>
+
+    <string name="settings_processing">Track</string>
+    <string name="settings_spikes">Remove GPS spikes</string>
+    <string name="settings_spikes_hint">Drop impossible jumps (faster than 250 km/h)</string>
+    <string name="settings_split_pauses">Split at pauses</string>
+    <string name="settings_split_pauses_hint">Start a new track segment when the timer was paused</string>
+    <string name="settings_split_sessions">One track per sport</string>
+    <string name="settings_split_sessions_hint">Multisport activities (triathlon) become one track per leg</string>
+    <string name="settings_simplify">Simplify track</string>
+    <string name="settings_simplify_off">Off (every point)</string>
+    <string name="settings_simplify_value">Within %1$d m</string>
+    <string name="settings_simplify_hint">Removes points that don\'t change the shape by more than this. Makes files much smaller; handy for routes, not for training analysis.</string>
+    <string name="settings_precision">Coordinate precision</string>
+    <string name="settings_precision_7">7 decimals (≈1 cm)</string>
+    <string name="settings_precision_6">6 decimals (≈10 cm)</string>
+    <string name="settings_precision_5">5 decimals (≈1 m)</string>
+
+    <string name="settings_privacy">Privacy</string>
+    <string name="settings_zones">Privacy zones</string>
+    <string name="settings_zones_none">None: add your home or work to hide them from every export</string>
+    <plurals name="settings_zones_count">
+        <item quantity="one">%d zone</item>
+        <item quantity="other">%d zones</item>
+    </plurals>
+    <string name="settings_hide_start">Hide start of every track</string>
+    <string name="settings_hide_end">Hide end of every track</string>
+    <string name="settings_hide_hint">Removes this distance from every exported track. You can change it for a single activity in the editor.</string>
+
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System default</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_dynamic">Dynamic color</string>
+    <string name="settings_dynamic_hint">Use colors from your wallpaper</string>
+    <string name="settings_units">Units</string>
+    <string name="settings_units_metric">Metric (km, m)</string>
+    <string name="settings_units_imperial">Imperial (mi, ft)</string>
+    <string name="settings_map">Show map</string>
+    <string name="settings_map_hint">Downloads map tiles from OpenStreetMap. Turn off to stay fully offline.</string>
+
+    <!-- Privacy zones -->
+    <string name="zones_intro">Points inside a privacy zone are removed from every GPX file you export, so nobody can see where you live or work.</string>
+    <string name="zones_map_hint">Long-press the map to add a zone.</string>
+    <string name="zones_empty">No privacy zones yet</string>
+    <string name="zones_default_name">Zone %1$d</string>
+    <string name="zones_label">Name (optional)</string>
+    <string name="zones_radius">Radius</string>
+    <string name="zones_add_coordinates">Add by coordinates</string>
+    <string name="zones_coordinates_hint">Latitude and longitude in decimal degrees, e.g. from a map app.</string>
+
+    <!-- About -->
+    <string name="about_title">About FitGPX</string>
+    <string name="about_subtitle">Version, source code, licenses</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_description">A free and open-source converter from FIT activity files to GPX, made for athletes who want their data in their own hands.</string>
+    <string name="about_privacy">Private by design</string>
+    <string name="about_privacy_body">No accounts, no analytics, no ads. Files are converted on your phone.</string>
+    <string name="about_source">Source code</string>
+    <string name="about_issue">Report a problem</string>
+    <string name="about_issue_body">Found a file that doesn\'t convert? Open an issue on GitHub.</string>
+    <string name="about_license">License</string>
+    <string name="about_map_data">Map data</string>
+    <string name="about_libraries">Open-source libraries</string>
+</resources>

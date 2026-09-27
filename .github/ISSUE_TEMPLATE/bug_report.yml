@@ -1,0 +1,32 @@
+name: Bug report
+description: A file doesn't convert, the app crashes, or something looks wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make FitGPX better! If a specific file fails, attaching it (or a zipped copy)
+        is the fastest way to a fix. **Remove anything private first** — or use a privacy zone and share
+        the exported GPX instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Recording device
+      placeholder: e.g. Garmin Edge 540, Wahoo ELEMNT Bolt v2, Coros Pace 3, Zwift
+  - type: input
+    id: version
+    attributes:
+      label: FitGPX version and Android version
+      placeholder: e.g. FitGPX 1.0.0 on Android 15 (Pixel 8)
+  - type: textarea
+    id: files
+    attributes:
+      label: Sample file
+      description: Drag a .fit (zip it first) or .gpx file here if you can.
