@@ -5,6 +5,7 @@
 package io.github.philtomlinson.fitgpx
 
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 
@@ -26,10 +27,10 @@ internal object DeviceTestSupport {
      */
     fun screenshot(name: String) {
         val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
-        fun shell(cmd: String) = automation.executeShellCommand(cmd).close()
+        // Reading the output to EOF waits for the shell command to finish.
+        fun shell(cmd: String) = ParcelFileDescriptor.AutoCloseInputStream(automation.executeShellCommand(cmd)).use { it.readBytes() }
         shell("mkdir -p $SHOTS_DIR")
         shell("screencap -p $SHOTS_DIR/$name.png")
-        Thread.sleep(500) // screencap runs asynchronously in the shell
     }
 
     private const val SHOTS_DIR = "/data/local/tmp/fitgpx-shots"
