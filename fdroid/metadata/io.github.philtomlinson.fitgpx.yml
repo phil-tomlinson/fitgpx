@@ -13,11 +13,11 @@ SourceCode: https://github.com/phil-tomlinson/fitgpx
 IssueTracker: https://github.com/phil-tomlinson/fitgpx/issues
 Changelog: https://github.com/phil-tomlinson/fitgpx/blob/main/CHANGELOG.md
 
-# Replace with the SHA-256 fingerprint of our signing certificate, printed at the bottom of every
-# GitHub Release (also in SHA256SUMS.txt). This lets F-Droid ship a build signed with our own key, so
-# users can move between the GitHub and F-Droid builds without uninstalling.
+# Fingerprint of our v1.1.0 signing certificate (github.com/phil-tomlinson/fitgpx/releases/tag/v1.1.0).
+# Lets F-Droid ship a build signed with our own key, so users can move between the GitHub and F-Droid
+# builds without uninstalling. Update this if the signing key is ever rotated.
 AllowedAPKSigningKeys:
-  - REPLACE_WITH_SIGNING_CERT_SHA256
+  - a924accc3cf577bef763787e0cbb7a107b5dae03ba20488decb3346a1b0a5eec
 
 RepoType: git
 Repo: https://github.com/phil-tomlinson/fitgpx.git
