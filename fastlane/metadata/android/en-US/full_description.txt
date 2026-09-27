@@ -1,0 +1,34 @@
+<p>Garmin, Wahoo, Coros, Hammerhead, Bryton, Zwift and most other fitness devices record activities as <b>.fit</b> files. <b>FitGPX</b> converts them to <b>GPX</b> on your phone, so you can use them in mapping, route-planning and analysis tools, without an account, a server, or uploading your location anywhere.</p>
+
+<p><b>Batch conversion</b></p>
+<ul>
+<li>Pick many files, a whole folder, a Garmin Connect export (.zip) or a Strava bulk export (.fit.gz)</li>
+<li>Huge archives are streamed, so thousands of activities convert on a phone</li>
+<li>Save to a folder you choose once, bundle everything into a ZIP, or share to any app</li>
+<li>Open or share .fit files into FitGPX from your file manager, email or the Garmin Connect app</li>
+</ul>
+
+<p><b>Trim editor</b></p>
+<ul>
+<li>Drag handles on an elevation, speed or heart-rate profile to keep only the part you want</li>
+<li>See the result on an OpenStreetMap map, and nudge the start and end point by point</li>
+<li>"Trim idle" removes standing around before the start and after the finish</li>
+</ul>
+
+<p><b>Privacy</b></p>
+<ul>
+<li>Privacy zones remove your home or work from every export</li>
+<li>Hide the first or last few hundred metres of any track</li>
+<li>Optionally drop timestamps or heart rate before sharing</li>
+<li>No accounts, analytics or ads. The map can be switched off for fully offline use</li>
+</ul>
+
+<p><b>Faithful output</b></p>
+<ul>
+<li>Elevation, time, heart rate, cadence, power and temperature in the GPX dialect read by Strava, Garmin Connect, Komoot, Ride with GPS, OsmAnd and GoldenCheetah</li>
+<li>Course points (turns, climbs, water) become waypoints</li>
+<li>Recovers GPS data from files left truncated by a crash or flat battery</li>
+<li>Multisport activities become one track per sport; optional GPS-spike removal, simplification and pause splitting</li>
+</ul>
+
+<p>FitGPX is free software under the GPL-3.0-or-later license. It isn't affiliated with Garmin.</p>

@@ -1,0 +1,1 @@
+Convert FIT activity files to GPX: batch, trim and privacy zones, offline

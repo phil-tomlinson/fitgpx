@@ -1,0 +1,1 @@
+First release: batch FIT to GPX conversion (files, folders, Garmin and Strava exports), trim editor with map and profile, privacy zones, hide start/end, GPS spike removal, simplification, recovery of damaged files, dark theme.

@@ -18,6 +18,8 @@ jobs:
     name: Build, test & lint
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    permissions:
+      contents: write # only used to publish the screenshots branch from main
     steps:
       - uses: actions/checkout@v7
 
@@ -31,28 +33,42 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Core library tests
-        run: ./gradlew --stacktrace :fit-core:test
+        run: .github/scripts/gradle.sh :fit-core:test
 
       - name: CLI
-        run: ./gradlew :cli:fatJar
+        run: .github/scripts/gradle.sh :cli:fatJar
 
       - name: App unit tests
-        run: ./gradlew :app:testDebugUnitTest
+        run: .github/scripts/gradle.sh --continue :app:testDebugUnitTest
 
       - name: Screenshots
-        run: ./gradlew :app:recordRoborazziDebug
+        run: .github/scripts/gradle.sh :app:recordRoborazziDebug
 
       - name: Lint
-        run: ./gradlew :app:lintDebug
+        run: .github/scripts/gradle.sh :app:lintDebug
 
       - name: Build APKs
-        run: ./gradlew :app:assembleDebug :app:assembleRelease
+        run: .github/scripts/gradle.sh :app:assembleDebug :app:assembleRelease
 
       - name: Smoke-test the CLI on real FIT files
         run: |
           mkdir -p /tmp/gpx
           java -jar cli/build/libs/fitgpx-cli.jar -o /tmp/gpx fit-core/src/test/resources/fit
           ls -la /tmp/gpx
+
+      - name: Publish screenshots to the ci/screenshots branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          out="$(mktemp -d)"
+          cp app/src/test/screenshots/*.png "$out"/
+          cd "$out"
+          git init -q -b ci/screenshots
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898099+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Screenshots for ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/screenshots
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v7
