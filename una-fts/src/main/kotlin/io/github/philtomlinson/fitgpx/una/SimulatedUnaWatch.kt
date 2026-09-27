@@ -22,6 +22,8 @@ class SimulatedUnaWatch(
     private val dropEveryNth: Int = 0,
     /** Cap each v5 burst below the requested window, like a watch with a smaller buffer (0 = no cap). */
     private val burstCap: Int = 0,
+    /** Say nothing (instead of ERROR_NO_FILE) when listing a directory that doesn't exist, as some firmware does. */
+    private val silentForMissing: Boolean = false,
 ) : FtsTransport {
 
     override val maxNotificationSize: Int = mtu - 3
@@ -71,7 +73,7 @@ class SimulatedUnaWatch(
             children[name] = if ('/' in rest) (true to 0L) else (false to data.size.toLong())
         }
         if (children.isEmpty() && dir != "/") {
-            queue += entry(FtsProtocol.STATUS_NO_FILE, 0, 0, false, 0, "")
+            if (!silentForMissing) queue += entry(FtsProtocol.STATUS_NO_FILE, 0, 0, false, 0, "")
             return
         }
         var i = 0

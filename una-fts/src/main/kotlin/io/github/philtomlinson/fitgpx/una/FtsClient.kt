@@ -57,6 +57,10 @@ class FtsClient(
     private val burstIdleMs: Long = 400,
     private val maxRetries: Int = 6,
     private val isCancelled: () -> Boolean = { Thread.currentThread().isInterrupted },
+    /** Directory listings wait this long: some firmware stays silent for paths that don't exist. */
+    private val listTimeoutMs: Long = 4_000,
+    /** Receives a human-readable trace of the conversation, for the shareable sync log. */
+    private val trace: (String) -> Unit = {},
 ) {
     val fastTransfer: Boolean get() = protocolVersion >= FtsProtocol.FAST_TRANSFER_VERSION
 
@@ -72,9 +76,19 @@ class FtsClient(
         var attempt = 0
         while (true) {
             try {
-                return listDirOnce(path)
+                val entries = listDirOnce(path)
+                trace("LIST $path → " + if (entries.isEmpty()) "(empty)" else entries.joinToString(", ") { if (it.isDirectory) "${it.name}/" else "${it.name} (${it.size} B)" })
+                return entries
             } catch (e: FtsException.Timeout) {
-                if (++attempt > 2) throw e
+                trace("LIST $path → no answer")
+                // A late reply must not be mistaken for the next listing: wait for silence first.
+                do {
+                    val late = transport.receive(burstIdleMs * 2)
+                } while (late != null)
+                if (++attempt > 1) throw e
+            } catch (e: FtsException) {
+                trace("LIST $path → ${e.message}")
+                throw e
             }
         }
     }
@@ -86,8 +100,12 @@ class FtsClient(
         val entries = sortedMapOf<Int, FtsEntry>()
         while (true) {
             checkCancelled()
-            val packet = transport.receive(timeoutMs) ?: throw FtsException.Timeout("listing $path")
-            val e = FtsProtocol.parseListEntry(packet) ?: continue // a stale response to something else
+            val packet = transport.receive(listTimeoutMs) ?: throw FtsException.Timeout("listing $path")
+            val e = FtsProtocol.parseListEntry(packet)
+            if (e == null) {
+                trace("ignored packet ${hex(packet)}") // a stale response to something else
+                continue
+            }
             if (e.status != FtsProtocol.STATUS_OK) throw statusError(e.status, "listing $path", path)
             if (e.isTerminator) break
             if (e.name != "." && e.name != "..") entries[e.entryNumber] = FtsEntry(e.name, e.isDirectory, e.size, e.modifiedNanos)
@@ -127,6 +145,8 @@ class FtsClient(
         if (verified(second, digest)) return second
         throw FtsException.Corrupt(path)
     }
+
+    private fun hex(b: ByteArray): String = b.take(32).joinToString("") { "%02x".format(it) } + if (b.size > 32) "…(${b.size} B)" else ""
 
     private fun verified(data: ByteArray, d: FtsDigest): Boolean =
         data.size.toLong() == d.size && CRC32().apply { update(data) }.value == d.crc32

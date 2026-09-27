@@ -231,6 +231,9 @@
         <item quantity="one">Add the synced activity to the list</item>
         <item quantity="other">Add all %d synced activities to the list</item>
     </plurals>
+    <string name="una_no_recordings">No recordings found on your watch</string>
+    <string name="una_no_recordings_hint">FitGPX looked through every folder on the watch. If you have recorded activities, tap Share log and send it to the developer so support for your watch can be added.</string>
+    <string name="una_share_log">Share log</string>
     <string name="una_view_activities">View activities</string>
     <string name="una_sync_again">Sync again</string>
     <string name="una_failed">Sync didn\'t finish</string>

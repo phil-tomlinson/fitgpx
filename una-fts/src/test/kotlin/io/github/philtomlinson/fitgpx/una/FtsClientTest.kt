@@ -124,14 +124,35 @@ class FtsClientTest {
         watch.putFile("/Apps/Hiking/Activity/202609/activity_20260920T100000.fit", data(700))
         watch.putFile("/Apps/ClockfaceRetro/settings.json", data(10))
         watch.putFile("/Apps/Running/Activity/202609/activity_20260901T060000.FIT", ByteArray(0)) // still being written
-        val apps = mutableListOf<String>()
-        val found = UnaActivityScanner(client(watch)).scan { apps += it }
+        val found = UnaActivityScanner(client(watch)).scan()
         assertEquals(
             listOf("activity_20260927T081502.fit", "activity_20260920T100000.fit", "activity_20260830T170000.fit"),
             found.map { it.name },
         )
         assertEquals(listOf("Cycling", "Hiking", "Cycling"), found.map { it.app })
         assertEquals(900L, found.first().size)
-        assertEquals(listOf("Cycling", "Hiking", "ClockfaceRetro", "Running"), apps)
+    }
+
+    /** Reproduces a real watch: it never answers a listing of a path that doesn't exist. */
+    @Test
+    fun scannerOnlyListsExistingDirectoriesAndSurvivesSilence() {
+        val watch = SimulatedUnaWatch(silentForMissing = true)
+        watch.putFile("/Apps/Alarm/alarms.json", data(40))
+        watch.putFile("/Apps/Cycling/Activity/202609/activity_20260927T081502.fit", data(900))
+        val lines = mutableListOf<String>()
+        val c = FtsClient(watch, 5, timeoutMs = 300, burstIdleMs = 30, listTimeoutMs = 100, isCancelled = { false }, trace = { lines += it })
+        val found = UnaActivityScanner(c).scan()
+        assertEquals(listOf("activity_20260927T081502.fit"), found.map { it.name })
+        assertTrue(lines.none { "no answer" in it }, lines.joinToString("\n"))
+        assertTrue(lines.any { it.startsWith("LIST /Apps → Alarm/, Cycling/") }, lines.joinToString("\n"))
+    }
+
+    @Test
+    fun scannerLooksOutsideAppsWhenNothingIsThere() {
+        val watch = SimulatedUnaWatch()
+        watch.putFile("/Apps/Alarm/alarms.json", data(40))
+        watch.putFile("/Activities/2026-09-27-081502.fit", data(900))
+        val found = UnaActivityScanner(client(watch)).scan()
+        assertEquals(listOf("/Activities/2026-09-27-081502.fit"), found.map { it.path })
     }
 }

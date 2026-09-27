@@ -34,7 +34,9 @@ sealed interface SyncState {
     data class Scanning(val app: String?) : SyncState
     data class Downloading(val index: Int, val count: Int, val name: String, val received: Long, val total: Long) : SyncState
     data object Importing : SyncState
-    data class Done(val added: Int, val alreadySynced: Int, val failed: Int) : SyncState
+    data class Done(val added: Int, val alreadySynced: Int, val failed: Int) : SyncState {
+        val nothingOnWatch: Boolean get() = added == 0 && alreadySynced == 0 && failed == 0
+    }
     data class Failed(val message: String) : SyncState
 
     val busy: Boolean get() = this is Connecting || this is Scanning || this is Downloading || this is Importing
@@ -51,6 +53,17 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
 
     private val _state = MutableStateFlow<SyncState>(SyncState.Idle)
     val state: StateFlow<SyncState> = _state.asStateFlow()
+
+    private val logLines = mutableListOf<String>()
+    private var logStart = 0L
+
+    /** A plain-text account of the last sync (folders seen, errors) that the user can share for support. */
+    val lastLog: String get() = synchronized(logLines) { logLines.joinToString("\n") }
+
+    private fun log(line: String) {
+        val t = (System.currentTimeMillis() - logStart) / 1000.0
+        synchronized(logLines) { logLines += String.format(java.util.Locale.ROOT, "%6.1fs  %s", t, line) }
+    }
 
     fun reset() {
         if (!_state.value.busy) _state.value = SyncState.Idle
@@ -75,12 +88,19 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
         }
         var already = 0
         var failed = 0
+        synchronized(logLines) { logLines.clear() }
+        logStart = System.currentTimeMillis()
+        log("FitGPX ${io.github.philtomlinson.fitgpx.BuildConfig.VERSION_NAME}, Android ${android.os.Build.VERSION.RELEASE} (${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL})")
         try {
             runInterruptible(Dispatchers.IO) {
-                connector.connect { _state.value = SyncState.Connecting(it) }.use { link ->
-                    val client = FtsClient(link.transport, link.protocolVersion)
+                connector.connect {
+                    log("Stage: $it")
+                    _state.value = SyncState.Connecting(it)
+                }.use { link ->
+                    log("Connected: File Transfer protocol v${link.protocolVersion}, notification size ${link.transport.maxNotificationSize} B")
+                    val client = FtsClient(link.transport, link.protocolVersion, trace = ::log)
                     _state.value = SyncState.Scanning(null)
-                    val found = UnaActivityScanner(client).scan { _state.value = SyncState.Scanning(it) }
+                    val found = UnaActivityScanner(client, log = ::log).scan { _state.value = SyncState.Scanning(it) }
                     val todo = found.filter { local(it).let { f -> !f.exists() || f.length() != it.size } }
                     already = found.size - todo.size
                     todo.forEachIndexed { i, a ->
@@ -93,9 +113,11 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
                             tmp.writeBytes(bytes)
                             if (!tmp.renameTo(target)) throw IOException("Couldn't save ${a.name}")
                             newFiles += target
+                            log("Copied ${a.path} (${bytes.size} B)")
                         } catch (e: FtsException.Cancelled) {
                             throw e
                         } catch (e: FtsException) {
+                            log("Couldn't copy ${a.path}: ${e.message}")
                             failed++
                         }
                     }
@@ -110,6 +132,7 @@ class UnaSync(context: Context, private val queue: QueueRepository) {
         } catch (e: FtsException.Cancelled) {
             _state.value = SyncState.Idle
         } catch (e: Exception) {
+            log("Failed: ${e.javaClass.simpleName}: ${e.message}")
             _state.value = SyncState.Failed(e.message ?: e.javaClass.simpleName)
         } finally {
             // Whatever was copied before a failure or cancel still goes into the list, otherwise

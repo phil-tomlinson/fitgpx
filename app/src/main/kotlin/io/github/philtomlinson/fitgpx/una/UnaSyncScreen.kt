@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.BluetoothDisabled
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ErrorOutline
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Watch
@@ -119,6 +120,14 @@ fun UnaSyncScreen(viewModel: UnaSyncViewModel, devices: UnaDevices, onBack: () -
         onAddAll = { viewModel.addAllSynced(); viewModel.reset(); onBack() },
         onDone = { viewModel.reset(); onBack() },
         onAgain = viewModel::reset,
+        onShareLog = {
+            val send = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "FitGPX UNA sync log")
+                putExtra(Intent.EXTRA_TEXT, viewModel.log)
+            }
+            context.startActivity(Intent.createChooser(send, null))
+        },
     )
 }
 
@@ -139,6 +148,7 @@ fun UnaSyncContent(
     onAddAll: () -> Unit,
     onDone: () -> Unit,
     onAgain: () -> Unit,
+    onShareLog: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -154,8 +164,8 @@ fun UnaSyncContent(
         ) {
             Header()
             when (state) {
-                is SyncState.Done -> DoneCard(state, onDone, onAddAll, onAgain)
-                is SyncState.Failed -> FailedCard(state.message, remembered, onSync, onAgain)
+                is SyncState.Done -> DoneCard(state, onDone, onAddAll, onAgain, onShareLog)
+                is SyncState.Failed -> FailedCard(state.message, remembered, onSync, onAgain, onShareLog)
                 SyncState.Idle -> PickCard(readiness, devices, scanning, remembered, onAllowBluetooth, onEnableBluetooth, onSync)
                 else -> ProgressCard(state, onCancel)
             }
@@ -281,12 +291,21 @@ private fun ProgressCard(state: SyncState, onCancel: () -> Unit) {
 }
 
 @Composable
-private fun DoneCard(state: SyncState.Done, onDone: () -> Unit, onAddAll: () -> Unit, onAgain: () -> Unit) {
+private fun DoneCard(state: SyncState.Done, onDone: () -> Unit, onAddAll: () -> Unit, onAgain: () -> Unit, onShareLog: () -> Unit) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Icon(Icons.Filled.CheckCircle, null, tint = FitGpxTheme.colors.success, modifier = Modifier.size(40.dp))
+            Icon(
+                if (state.nothingOnWatch) Icons.Filled.Info else Icons.Filled.CheckCircle,
+                null,
+                tint = if (state.nothingOnWatch) MaterialTheme.colorScheme.onSurfaceVariant else FitGpxTheme.colors.success,
+                modifier = Modifier.size(40.dp),
+            )
             Text(
-                if (state.added > 0) pluralStringResource(R.plurals.una_added, state.added, state.added) else stringResource(R.string.una_nothing_new),
+                when {
+                    state.added > 0 -> pluralStringResource(R.plurals.una_added, state.added, state.added)
+                    state.nothingOnWatch -> stringResource(R.string.una_no_recordings)
+                    else -> stringResource(R.string.una_nothing_new)
+                },
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
             )
@@ -311,13 +330,24 @@ private fun DoneCard(state: SyncState.Done, onDone: () -> Unit, onAddAll: () -> 
                     Text(pluralStringResource(R.plurals.una_add_all, state.alreadySynced, state.alreadySynced))
                 }
             }
-            TextButton(onClick = onAgain) { Text(stringResource(R.string.una_sync_again)) }
+            if (state.nothingOnWatch) {
+                Text(
+                    stringResource(R.string.una_no_recordings_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+            }
+            Row {
+                TextButton(onClick = onAgain) { Text(stringResource(R.string.una_sync_again)) }
+                if (state.nothingOnWatch || state.failed > 0) TextButton(onClick = onShareLog) { Text(stringResource(R.string.una_share_log)) }
+            }
         }
     }
 }
 
 @Composable
-private fun FailedCard(message: String, remembered: WatchDevice?, onSync: (WatchDevice) -> Unit, onAgain: () -> Unit) {
+private fun FailedCard(message: String, remembered: WatchDevice?, onSync: (WatchDevice) -> Unit, onAgain: () -> Unit, onShareLog: () -> Unit) {
     ElevatedCard(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp).fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -327,7 +357,8 @@ private fun FailedCard(message: String, remembered: WatchDevice?, onSync: (Watch
             }
             Text(message, style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.una_tips), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.align(Alignment.End)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.align(Alignment.End)) {
+                TextButton(onClick = onShareLog) { Text(stringResource(R.string.una_share_log)) }
                 TextButton(onClick = onAgain) { Text(stringResource(R.string.una_choose_watch)) }
                 if (remembered != null) Button(onClick = { onSync(remembered) }) { Text(stringResource(R.string.una_retry)) }
             }

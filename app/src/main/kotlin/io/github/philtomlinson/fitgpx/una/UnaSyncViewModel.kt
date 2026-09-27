@@ -88,6 +88,8 @@ class UnaSyncViewModel(
 
     fun reset() = sync.reset()
 
+    val log: String get() = sync.lastLog
+
     override fun onCleared() {
         scanJob?.cancel()
     }
