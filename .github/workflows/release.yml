@@ -3,6 +3,9 @@ name: Release
 on:
   push:
     tags: ['v*']
+    # Pushing to the `release` branch releases the versionName in app/build.gradle.kts and
+    # creates the matching tag (handy when tags can't be pushed directly).
+    branches: [release]
   workflow_dispatch:
     inputs:
       tag:
@@ -16,12 +19,24 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    env:
-      TAG: ${{ github.event.inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ env.TAG }}
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: Resolve tag
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            tag="${{ github.event.inputs.tag }}"
+          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="v$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)"
+            if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null; then
+              echo "::error::$tag already exists. Bump versionName before pushing to the release branch."; exit 1
+            fi
+          fi
+          echo "TAG=$tag" >> "$GITHUB_ENV"
 
       - uses: actions/setup-java@v6
         with:
@@ -84,6 +99,7 @@ jobs:
       - uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.TAG }}
+          target_commitish: ${{ github.sha }}
           name: FitGPX ${{ env.TAG }}
           body_path: notes.md
           files: dist/*

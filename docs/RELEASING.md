@@ -40,6 +40,8 @@ To build a signed APK locally, export the same values as environment variables
    git tag -a vX.Y.Z -m "FitGPX X.Y.Z"
    git push origin main vX.Y.Z
    ```
+   Or, without creating the tag yourself: `git push origin main:release`. The workflow then releases
+   the `versionName` from `app/build.gradle.kts` and creates the tag.
 6. The **Release** workflow builds the signed APK and CLI jar and publishes the GitHub Release with
    checksums and the signing certificate fingerprint.
 
