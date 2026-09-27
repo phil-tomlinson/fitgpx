@@ -88,3 +88,4 @@ jobs:
           body_path: notes.md
           files: dist/*
           fail_on_unmatched_files: true
+          prerelease: ${{ contains(env.TAG, '-') }}

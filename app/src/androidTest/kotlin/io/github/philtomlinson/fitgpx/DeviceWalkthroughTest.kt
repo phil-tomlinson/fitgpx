@@ -44,7 +44,7 @@ class DeviceWalkthroughTest {
         rule.onNodeWithContentDescription("Settings").performClick()
         rule.waitUntilAtLeastOneExists(hasText("GPX content"), 10_000)
         screenshot("03_settings")
-        rule.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
+        rule.onNodeWithContentDescription("Back").performClick()
         rule.waitUntilAtLeastOneExists(hasText("Convert 2 activities"), 10_000)
 
         rule.onAllNodesWithText("Ride", substring = true).onFirst().performClick()
